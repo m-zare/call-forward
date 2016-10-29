@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 /**
  * Created by Mostafa on 10/28/2016.
  */
-public class Socket {
-    protected String ip;
-    protected int port;
+public class ServerInfo {
+    protected String ip = "192.168.1.100";
+    protected int port = 5038;
 
     public String getIp() {
         return ip;
