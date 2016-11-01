@@ -1,10 +1,12 @@
 package asterisk;
 
+import java.io.IOException;
+
 /**
  * Created by Mostafa on 10/28/2016.
  */
 
-public class OriginateCall {
+public abstract class MakeAction {
     private String src="100";
     private String dst="101";
     private String context="default";
@@ -33,7 +35,8 @@ public class OriginateCall {
         return context;
     }
 
-    public String originate(){
-        return "Action: Originate\nChannel: sip/"+getSrc()+"\nExten:"+getDst()+"\nContext:"+getContext()+"\nPriority: 1\n\n";
-    }
+    public abstract String actionOriginate() throws IOException;
+    public abstract String actionRedirect() throws IOException;
+    public abstract String actionTransfer() throws IOException;
+    public abstract String actionCommand(String command) throws IOException;
 }
