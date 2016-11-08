@@ -1,23 +1,20 @@
-package asterisk;
+package model.entity;
 
-import java.net.Socket;
 import java.util.regex.Pattern;
 
 /**
- * Created by Mostafa on 10/28/2016.
+ * Created by Mostafa on 11/8/2016.
  */
-public class Connection implements ServerInfo{
+public class ConnectionEntity {
     private String ip = "192.168.1.100";
     private int port = 5038;
     private String amiUserName = "mostafa";
     private String amiPassword = "m121990";
 
-    @Override
     public String getIp() {
         return ip;
     }
 
-    @Override
     public void setIp(String ip) {
         if (PATTERN.matcher(ip).matches()){
             this.ip = ip;
@@ -27,12 +24,10 @@ public class Connection implements ServerInfo{
         }
     }
 
-    @Override
     public int getPort() {
         return port;
     }
 
-    @Override
     public void setPort(int port) {
         if (port > 0 && port <= 65536){
             this.port = port;
@@ -60,8 +55,4 @@ public class Connection implements ServerInfo{
     }
 
     private Pattern PATTERN = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-
-    public Socket openConnection() throws Exception{
-        return new Socket(getIp(),getPort());
-    }
 }
