@@ -9,7 +9,6 @@ import static java.lang.Thread.sleep;
  * Created by Mostafa on 11/8/2016.
  */
 public class ActionDA {
-    private ConnectionEntity connection;
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
@@ -19,8 +18,7 @@ public class ActionDA {
    * open socket
    * make login
    */
-    public ActionDA() throws IOException, InterruptedException {
-        connection = new ConnectionEntity();
+    public ActionDA(ConnectionEntity connection) throws IOException, InterruptedException {
         socket = new Socket(connection.getIp(),connection.getPort());
 
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -30,8 +28,10 @@ public class ActionDA {
         String answer = in.readLine();
 
         sleep(1000);
+        //System.out.println("Server says: "+answer);
 
-        System.out.println("Server says: "+answer);
+        EventListener eventListener = new EventListener();
+        eventListener.start();
     }
 
     /*

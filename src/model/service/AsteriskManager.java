@@ -12,9 +12,10 @@ public class AsteriskManager{
 
     public void test() {
         try {
-            ActionDA actionDA=new ActionDA();
-            ActionEntity actionEntity = new ActionEntity("100","101");
+            ConnectionEntity connection = new ConnectionEntity();
+            ActionDA actionDA=new ActionDA(connection);
 
+            ActionEntity actionEntity = new ActionEntity("100","101");
             actionDA.actionOriginate(actionEntity);
 
             actionDA.close();
@@ -23,6 +24,7 @@ public class AsteriskManager{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        while (true){}
     }
     /*
     * open connection
