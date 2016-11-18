@@ -29,9 +29,6 @@ public class ActionDA {
 
         sleep(1000);
         //System.out.println("Server says: "+answer);
-
-        EventListener eventListener = new EventListener();
-        eventListener.start();
     }
 
     /*
@@ -97,6 +94,13 @@ public class ActionDA {
                 "Context: " + actionEntity.getContext() + "\n" +
                 "Exten: " + actionEntity.getDst() + "\n" +
                 "Priority: 1");
+        return in.readLine();
+    }
+
+    public String actionAsyncBreak(String Channel) throws IOException {
+        out.println( "Action: AGI\n" +
+        "Channel: "+ Channel +"\n" +
+        "Command: ASYNCAGI BREAK\n\n");
         return in.readLine();
     }
 
