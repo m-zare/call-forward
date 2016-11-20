@@ -1,33 +1,30 @@
 package model.entity;
 
-import java.io.IOException;
-
 /**
  * Created by Mostafa on 10/28/2016.
  */
-
 public class ActionEntity {
     private String src = "100";
     private String dst = "101";
     private String context = "default";
+    private String channel;
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
 
     public ActionEntity() {
     }
 
-    /**
-     * @param src
-     * @param dst
-     */
     public ActionEntity(String src, String dst) {
         this.src = src;
         this.dst = dst;
     }
 
-    /**
-     * @param src
-     * @param dst
-     * @param context description dsfd fsdf
-     */
     public ActionEntity(String src, String dst, String context) {
         this.src = src;
         this.dst = dst;
@@ -57,6 +54,4 @@ public class ActionEntity {
     public String getContext() {
         return context;
     }
-
-
 }
