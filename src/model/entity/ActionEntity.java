@@ -7,9 +7,9 @@ import java.io.IOException;
  */
 
 public class ActionEntity {
-    private String src="100";
-    private String dst="101";
-    private String context="default";
+    private String src = "100";
+    private String dst = "101";
+    private String context = "default";
 
     public ActionEntity() {
     }

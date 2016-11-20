@@ -1,6 +1,7 @@
 package model.da;
 
 import model.entity.ConnectionEntity;
+import model.entity.EventEntity;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,25 +15,34 @@ public class EventListener extends Thread {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private HashMap<String,String> callData = new HashMap();
+    private EventHandler eventHandler;
 
-    public HashMap<String, String> getCallData() {
-        return callData;
+    public ConnectionEntity getConnection() {
+        return connection;
     }
 
-    public void setCallData(HashMap<String, String> callData) {
-        this.callData = callData;
+    public void setConnection(ConnectionEntity connection) {
+        this.connection = connection;
     }
 
-    public EventListener(ConnectionEntity connection){
+    public EventHandler getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(EventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    public EventListener(ConnectionEntity connection, EventHandler eventHandler){
+        setEventHandler(eventHandler);
         this.connection = connection;
     }
 
     @Override
     public void run() {
-        try {
-            EventHandler eventHandler = new EventHandler();
+        EventEntity callData = new EventEntity();
 
+        try {
             connection = new ConnectionEntity();
             socket = new Socket(connection.getIp(), connection.getPort());
 
@@ -46,15 +56,19 @@ public class EventListener extends Thread {
             {
                 String str = in.readLine();
                 if(str.length()==0) {
-                    if (!callData.isEmpty() && callData.get("Event")!= null) {
-                        if (callData.get("Event").trim().equals("NewCallerid")) {
-                            eventHandler.callerID(callData,connection);
+
+                    if (!callData.getE().isEmpty() && callData.getE().get("Event")!= null) {
+                        if (callData.getE().get("Event").toString().trim().equals("NewCallerid")) {
+                            eventHandler.callerID(callData,getConnection());
                         }
-                        if (callData.get("Event").trim().equals("Dial")) {
-                            eventHandler.call(callData,connection);
+                        else if (callData.getE().get("Event").toString().trim().equals("Dial")) {
+                            eventHandler.call(callData,getConnection());
                         }
-                        if (callData.get("Event").trim().equals("Hangup")) {
-                            eventHandler.hangUp(callData,connection);
+                        else if (callData.getE().get("Event").toString().trim().equals("Hangup")) {
+                            eventHandler.hangUp(callData,getConnection());
+                        }
+                        else if (callData.getE().get("Event").toString().trim().equals("AsyncAGI")) {
+                            eventHandler.asyncAgi(callData,getConnection());
                         }
                         callData.clear();
                     }
@@ -65,7 +79,7 @@ public class EventListener extends Thread {
                         str+=" ";
                     }
                     String[] strs = str.split(":");
-                    callData.put(strs[0], strs[1]);
+                    callData.getE().put(strs[0], strs[1]);
                 }
             }
         }

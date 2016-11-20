@@ -16,10 +16,9 @@ public class ConnectionEntity {
     }
 
     public void setIp(String ip) {
-        if (PATTERN.matcher(ip).matches()){
+        if (PATTERN.matcher(ip).matches()) {
             this.ip = ip;
-        }
-        else {
+        } else {
             System.out.println("IP is not valid.");
         }
     }
@@ -29,10 +28,9 @@ public class ConnectionEntity {
     }
 
     public void setPort(int port) {
-        if (port > 0 && port <= 65536){
+        if (port > 0 && port <= 65536) {
             this.port = port;
-        }
-        else {
+        } else {
             System.out.println("Port is not valid.");
         }
 
