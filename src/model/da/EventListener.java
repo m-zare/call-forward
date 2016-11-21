@@ -37,7 +37,7 @@ public class EventListener extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run()  {
         EventEntity callData = new EventEntity();
         try {
             connection = new ConnectionEntity();
@@ -47,25 +47,31 @@ public class EventListener extends Thread {
             out = new PrintWriter(socket.getOutputStream(), true);
 
             out.println("action:login\nusername:" + connection.getAmiUserName() + "\nsecret:" + connection.getAmiPassword() + "\n");
-            sleep(1000);
+            //sleep(1000);
 
             while (true) {
                 String str = in.readLine();
+                //Detect blank line after each action
                 if (str.length() == 0) {
-
+                    //Throws Event
                     if (!callData.getE().isEmpty() && callData.getE().get("Event") != null) {
                         if (callData.getE().get("Event").toString().trim().equals("NewCallerid")) {
                             eventHandler.callerID(callData, getConnection());
+
                         } else if (callData.getE().get("Event").toString().trim().equals("Dial")) {
                             eventHandler.call(callData, getConnection());
+
                         } else if (callData.getE().get("Event").toString().trim().equals("Hangup")) {
                             eventHandler.hangUp(callData, getConnection());
+
                         } else if (callData.getE().get("Event").toString().trim().equals("AsyncAGI")) {
                             eventHandler.asyncAgi(callData, getConnection());
                         }
                         callData.clear();
                     }
+                //Road line belongs an action. Add it to Event Hashmap
                 } else if (str.contains(":")) {
+                    //If line does not contain ":", do not consider it as a Variable.
                     if (str.lastIndexOf(":") + 1 == str.length()) {
                         str += " ";
                     }

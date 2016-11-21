@@ -7,7 +7,6 @@ import model.entity.*;
  * Created by Mostafa on 10/28/2016.
  */
 public class AsteriskManager {
-    private String CID;
     private EventEntity e = new EventEntity();
     public EventHandler eventHandler = new EventHandler() {
         @Override
@@ -20,14 +19,27 @@ public class AsteriskManager {
 
         @Override
         public void callerID(EventEntity e, ConnectionEntity connection) {
-            CID = e.getE().get("CallerIDNum").trim();
+            String CID = e.getE().get("CallerIDNum").trim();
             System.out.println("CID: " + CID);
-            String Exten = "101";
-
-            if (CID.equals("0912")) {
+            String Exten = "";
+            ActionDA actionDA = null;
+            boolean specifiedCall=false;
+            try {
+                actionDA = new ActionDA(new ConnectionEntity());
+                Exten = actionDA.dbGet(CID);
+                if (Exten!=null){
+                    specifiedCall = true;
+                }
+                else
+                {
+                    specifiedCall = false;
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            if (specifiedCall) {
                 try {
-                    System.out.println(CID + " routed to "+ Exten);
-                    ActionDA actionDA = new ActionDA(new ConnectionEntity());
+                    System.out.println(CID + " routed to " + Exten);
                     ActionEntity actionEntity = new ActionEntity();
                     actionEntity.setChannel(e.getE().get("Channel").trim());
                     actionEntity.setDst(Exten);
@@ -40,8 +52,8 @@ public class AsteriskManager {
             } else {
                 try {
                     System.out.println(CID + " will be routed to the Dialed Extention.");
-                    ActionDA actionDA = new ActionDA(new ConnectionEntity());
-                    actionDA.actionAsyncCommand(e.getE().get("Channel"), "ASYNCAGI BREAK");
+                    actionDA = new ActionDA(new ConnectionEntity());
+                    actionDA.actionAsyncCommand(e.getE().get("Channel").trim(), "ASYNCAGI BREAK");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -63,11 +75,14 @@ public class AsteriskManager {
 
     public void test() {
         try {
-            EventListener eventListener = new EventListener(new ConnectionEntity(), eventHandler);
+            EventListener eventListener = new EventListener(new ConnectionEntity(),eventHandler);
             eventListener.start();
+
+            //ActionDA actionDA = new ActionDA(new ConnectionEntity());
+            //actionDA.dbDel("0912");
+            //actionDA.dbPut("101","100");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

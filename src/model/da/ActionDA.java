@@ -27,13 +27,13 @@ public class ActionDA {
 
     public String actionOriginate(ActionEntity actionEntity) throws IOException {
         out.println("Action: Originate\nChannel: SIP/" + actionEntity.getSrc() + "\nExten: " + actionEntity.getDst() +
-                "\nPriority: 1\nTimeout: 60000\nContext: " + actionEntity.getContext() + "\n\n");
+                "\nPriority: 1\nTimeout: 60000\nContext: " + actionEntity.getContext() + "\n");
 
         return in.readLine();
     }
 
     public String actionCommand(String command) throws IOException {
-        out.println("Action: Command\ncommand: " + command + "\n\n");
+        out.println("Action: Command\ncommand: " + command + "\n");
 
         return in.readLine();
     }
@@ -43,7 +43,7 @@ public class ActionDA {
                 "Channel: " + actionEntity.getChannel() + "\n" +
                 "Exten: " + actionEntity.getDst() + "\n" +
                 "Priority: 1\n" +
-                "Context: " + actionEntity.getContext() + "\n\n");
+                "Context: " + actionEntity.getContext() + "\n");
         return in.readLine();
     }
 
@@ -54,15 +54,53 @@ public class ActionDA {
                 "Channel: SIP/" + channel + "\n" +
                 "Context: " + actionEntity.getContext() + "\n" +
                 "Exten: " + actionEntity.getDst() + "\n" +
-                "Priority: 1");
+                "Priority: 1\n");
         return in.readLine();
     }
 
     public String actionAsyncCommand(String Channel, String Command) throws IOException {
         out.println("Action: AGI\n" +
                 "Channel: " + Channel + "\n" +
-                "Command: " + Command + "\n\n");
+                "Command: " + Command + "\n");
         return in.readLine();
+    }
+
+    public void dbPut(String key, String value) throws IOException {
+        out.println("Action: DBPut\n" +
+                "Family: app\n" +
+                "Key: " + key + "\n" +
+                "Val: " + value + "\n");
+    }
+
+    public String dbGet(String key) throws IOException {
+        out.println("Action: DBGet\n" +
+                "Family: app\n" +
+                "Key: " + key + "\n");
+        String value;
+        while (true) {
+            String str = in.readLine();
+            if (str.equals("Event: DBGetResponse")) {
+                while (true) {
+                    str = in.readLine();
+                    String[] strs = str.split(":");
+                    if (strs[0].equals("Val")) {
+                        value = strs[1].trim();
+                        break;
+                    }
+                }
+                break;
+            } else if (str.equals("Response: Error")) {
+                value = null;
+                break;
+            }
+        }
+        return value;
+    }
+
+    public void dbDel(String key) throws IOException {
+        out.println("Action: DBDel\n" +
+                "Family: app\n" +
+                "Key: " + key + "\n");
     }
 
     public void close() throws IOException {
