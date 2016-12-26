@@ -79,8 +79,8 @@ public class AsteriskManager {
             eventListener.start();
 
             //ActionDA actionDA = new ActionDA(new ConnectionEntity());
-            //actionDA.dbDel("0912");
-            //actionDA.dbPut("101","100");
+            //actionDA.dbDel("101");
+            //actionDA.dbPut("0912","101");
         } catch (Exception e) {
             e.printStackTrace();
         }
