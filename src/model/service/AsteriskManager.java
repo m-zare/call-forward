@@ -23,21 +23,16 @@ public class AsteriskManager {
             System.out.println("CID: " + CID);
             String Exten = "";
             ActionDA actionDA = null;
-            boolean specifiedCall=false;
+            boolean specifiedCall = false;
             try {
                 actionDA = new ActionDA(new ConnectionEntity());
                 Exten = actionDA.dbGet(CID);
-                if (Exten!=null){
-                    specifiedCall = true;
-                }
-                else
-                {
-                    specifiedCall = false;
-                }
-            } catch (Exception e1) {
-                e1.printStackTrace();
+                specifiedCall = Exten != null;
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
             if (specifiedCall) {
+                //Call should redirect to an specific Extention.
                 try {
                     System.out.println(CID + " routed to " + Exten);
                     ActionEntity actionEntity = new ActionEntity();
@@ -50,6 +45,7 @@ public class AsteriskManager {
                     ex.printStackTrace();
                 }
             } else {
+                //Call should continue Normal dialplan
                 try {
                     System.out.println(CID + " will be routed to the Dialed Extention.");
                     actionDA = new ActionDA(new ConnectionEntity());

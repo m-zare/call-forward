@@ -52,6 +52,7 @@ public class EventListener extends Thread {
             while (true) {
                 String str = in.readLine();
                 //Detect blank line after each action
+                //Blank line determine end of an event
                 if (str.length() == 0) {
                     //Throws Event
                     if (!callData.getE().isEmpty() && callData.getE().get("Event") != null) {
